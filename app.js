@@ -2,13 +2,58 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const fetch = require("node-fetch");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
+
+app.use('/css', express.static(__dirname + '/css'))
+app.use('/js', express.static(__dirname + '/js'))
+app.use('/data', express.static(__dirname + '/data'))
+
+app.set('static', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+
+app.use(express.urlencoded());
+app.use(express.json());
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+const $ = (require('jquery'))(dom.window);
+
+app.get('/', function (req, res) {
+  res.render('index.html');
+});
+
+app.post('/', function (req, res) {
+  const baseUrl = 'https://rdap.afrinic.net/rdap/';
+  console.log(req.body);
+  let param = req.body;
+  let objectType = param['object-type'];
+  let query = param['query'];
+
+  switch (objectType) {
+    case 'ip':
+      fetch(baseUrl + 'ip/' + query)
+          .then(data => data.json())
+          // .then(data => res.send(data))
+          .catch(err => console.log(err));
+      //return res.send("It kinda worked")
+      break;
+    default:
+      break;
+
+  }
+  res.send('Did not work');
+
+});
+
+
 
 app.post('/json', (req, res) => {
   let json = req.body;
@@ -148,14 +193,10 @@ app.post('/json', (req, res) => {
   res.status(200).json({ fileName })
 });
 
-app.get('/json/:filename', (req, res) => {
-  res.sendFile(`data/${filename}`);
-});
 
 app.listen(PORT, (err) => {
   if (err) {
     return console.log('something bad happened', err);
   }
-
   console.log(`server is listening on ${PORT}`);
 });

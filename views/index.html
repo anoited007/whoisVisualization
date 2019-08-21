@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <title>AFRINIC Whois Visualization</title>
+</head>
+
+<body>
+
+<div class="container">
+
+
+ <form method="post" id="rdap" action="/json">
+   <div class="form-group">
+     <input type="text" class="form-control" id="query" name="query" placeholder="Enter your query" required>
+   </div>
+
+   <div class="checkbox">
+     <label><input type="radio" value="ip" name="object-type" id="ip"> IP</label>
+     <label><input type="radio" value="as-number" id="as-number" name="object-type"> AS Number</label>
+     <label><input type="radio" value="rdns" id="rdns" name="object-type"> RDNS</label>
+     <label><input type="radio" value="entity" id="entity" name="object-type"> Entity</label>
+   </div>
+   <button type="button" class="btn btn-default" id="submit"> Submit </button>
+ </form>
+
+</div>
+
+</body>
+</html>
