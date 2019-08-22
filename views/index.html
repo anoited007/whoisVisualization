@@ -15,13 +15,13 @@
 <div class="container">
 
 
- <form method="post" id="rdap" action="/json">
+ <form method="post" id="rdap">
    <div class="form-group">
      <input type="text" class="form-control" id="query" name="query" placeholder="Enter your query" required>
    </div>
 
    <div class="checkbox">
-     <label><input type="radio" value="ip" name="object-type" id="ip"> IP</label>
+     <label><input type="radio" value="ip" name="object-type" id="ip" checked> IP</label>
      <label><input type="radio" value="as-number" id="as-number" name="object-type"> AS Number</label>
      <label><input type="radio" value="rdns" id="rdns" name="object-type"> RDNS</label>
      <label><input type="radio" value="entity" id="entity" name="object-type"> Entity</label>
