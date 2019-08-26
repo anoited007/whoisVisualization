@@ -11,28 +11,44 @@ function sendData() {
     let queryValue = query.val().trim();
 
     if (queryValue !== "" && $("#ip").prop("checked")) {
-        $.getJSON(baseUrl + "ip/" + queryValue, function (data) {
-            console.log(data);
-            $.post("/json", data);
+        $.getJSON(baseUrl + "ip/" + queryValue,{
+            format: "json",
+            accept: "application/json",
+            processData: false
+        }).done(function (response) {
+            console.log(response);
+            console.log($(this));
+            $.post("/ip", {
+                data: response,
+                headers: {
+                    "Content-Type" : "application/json"
+                }
+            });
+
+        }).fail(function () {
+            alert("Unable to retrieve query from server.");
         })
+
     }
 
     else if(queryValue !== "" && $("#as-number").prop("checked")){
         $.getJSON(baseUrl + "autnum/" + queryValue, function (data) {
-            console.log(data)
-            $.post("/json", data);
+            console.log(data);
+            $.post("/as-number", data);
         })
     }
 
     else if(queryValue !== "" && $("#rdns").prop("checked")){
         $.getJSON(baseUrl + "domain/" + queryValue, function (data) {
-            $.post("/json", data);
+            console.log(data);
+            $.post("/rdns", data);
         })
     }
 
     else if(queryValue !== "" && $("#entity").prop("checked")){
         $.getJSON(baseUrl + "entity/" + queryValue, function (data) {
-            $.post("/json", data);
+            console.log(data);
+            $.post("/entity", data);
         })
     }
 }

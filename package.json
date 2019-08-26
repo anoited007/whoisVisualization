@@ -17,6 +17,10 @@
     "jquery": "latest",
     "jsdom": "latest",
     "node-fetch": "^2.6.0",
-    "nodemon": "^1.19.1"
+    "nodemon": "^1.19.1",
+    "axios": "latest"
+  },
+  "devDependencies": {
+    "axiom": "^0.1.6"
   }
 }

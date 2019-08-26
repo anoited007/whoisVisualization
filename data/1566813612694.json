@@ -1,0 +1,256 @@
+{
+  "_comment": "This is the AFRINIC RDAP server.",
+  "header": {
+    "title": {
+      "language": "en",
+      "undefined": "https://rdap.afrinic.net/rdap/ip/2001:42d0::/32"
+    },
+    "description": {
+      "undefined": "https://www.afrinic.net/support/whois-db/reference-manual"
+    },
+    "baseIris": [
+      "https://rdap.afrinic.net/rdap/ip/"
+    ],
+    "prefixList": {
+      "owl": "http://www.w3.org/2002/07/owl#",
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "xsd": "http://www.w3.org/2001/XMLSchema#",
+      "": "http://visualdataweb.de/ontobench/ontology/13/",
+      "xml": "http://www.w3.org/XML/1998/namespace",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+    },
+    "iri": "https://rdap.afrinic.net/rdap/ip/"
+  },
+  "class": [
+    {
+      "id": "0",
+      "type": "owl:Class"
+    },
+    {
+      "id": "1",
+      "type": "owl:Class"
+    },
+    {
+      "id": "2",
+      "type": "owl:Class"
+    },
+    {
+      "id": "3",
+      "type": "owl:Class"
+    }
+  ],
+  "classAttribute": [
+    {
+      "id": "0",
+      "label": "ORG-AFNC1-AFRINIC",
+      "comment": {
+        "undefined": "ip network"
+      },
+      "annotations": {
+        "type": [
+          {
+            "identifier": "IP Type",
+            "language": "en",
+            "value": "ALLOCATED-BY-RIR",
+            "type": "label"
+          }
+        ],
+        "handle": [
+          {
+            "identifier": "Handle",
+            "language": "en",
+            "value": "2001:42d0::/32",
+            "type": "label"
+          }
+        ],
+        "startAddress": [
+          {
+            "identifier": "Start Address",
+            "language": "en",
+            "value": "2001:42d0::",
+            "type": "label"
+          }
+        ],
+        "endAddress": [
+          {
+            "identifier": "End Address",
+            "language": "en",
+            "value": "2001:42d0:ffff:ffff:ffff:ffff:ffff:ffff",
+            "type": "label"
+          }
+        ],
+        "parentHandle": [
+          {
+            "identifier": "Parent Handle",
+            "language": "en",
+            "value": "2001:4200::/23",
+            "type": "label"
+          }
+        ],
+        "ipVersion": [
+          {
+            "identifier": "IP Version",
+            "language": "en",
+            "value": "v6",
+            "type": "label"
+          }
+        ],
+        "country": [
+          {
+            "identifier": "Country",
+            "language": "en",
+            "value": "ZA",
+            "type": "label"
+          }
+        ],
+        "status": [
+          {
+            "identifier": "Status",
+            "language": "en",
+            "value": [
+              "active"
+            ],
+            "type": "label"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1",
+      "label": "IT7-AFRINIC",
+      "annotations": {
+        "language": [
+          {
+            "identifier": "Language",
+            "language": "en",
+            "value": "en",
+            "type": "label"
+          }
+        ],
+        "status": [
+          {
+            "identifier": "Status",
+            "language": "en",
+            "value": [
+              "active"
+            ],
+            "type": "label"
+          }
+        ],
+        "roles": [
+          {
+            "identifier": "Roles",
+            "language": "en",
+            "value": [
+              "technical"
+            ],
+            "type": "label"
+          }
+        ]
+      }
+    },
+    {
+      "id": "2",
+      "label": "CA15-AFRINIC",
+      "annotations": {
+        "language": [
+          {
+            "identifier": "Language",
+            "language": "en",
+            "value": "en",
+            "type": "label"
+          }
+        ],
+        "status": [
+          {
+            "identifier": "Status",
+            "language": "en",
+            "value": [
+              "active"
+            ],
+            "type": "label"
+          }
+        ],
+        "roles": [
+          {
+            "identifier": "Roles",
+            "language": "en",
+            "value": [
+              "administrative",
+              "technical"
+            ],
+            "type": "label"
+          }
+        ]
+      }
+    },
+    {
+      "id": "3",
+      "label": "ORG-AFNC1-AFRINIC",
+      "annotations": {
+        "language": [
+          {
+            "identifier": "Language",
+            "language": "en",
+            "value": "en",
+            "type": "label"
+          }
+        ],
+        "status": [
+          {
+            "identifier": "Status",
+            "language": "en",
+            "value": [
+              "active"
+            ],
+            "type": "label"
+          }
+        ],
+        "roles": [
+          {
+            "identifier": "Roles",
+            "language": "en",
+            "value": [
+              "registrant"
+            ],
+            "type": "label"
+          }
+        ]
+      }
+    }
+  ],
+  "property": [
+    {
+      "id": "10",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "20",
+      "type": "owl:ObjectProperty"
+    },
+    {
+      "id": "30",
+      "type": "owl:ObjectProperty"
+    }
+  ],
+  "propertyAttribute": [
+    {
+      "id": "10",
+      "label": "entity",
+      "domain": "1",
+      "range": "0"
+    },
+    {
+      "id": "20",
+      "label": "entity",
+      "domain": "2",
+      "range": "0"
+    },
+    {
+      "id": "30",
+      "label": "entity",
+      "domain": "3",
+      "range": "0"
+    }
+  ]
+}
