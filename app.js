@@ -189,15 +189,15 @@ app.post('/', function (req, res) {
                     let vizJson = {
                         "_comment": "This is the AFRINIC RDAP server.",
                         "header": {
-                            "title" : {
-                                "language": json.lang,
-                                "undefined" : json["notices"][0]["links"][0].value
+                            "title": {
+                                "language": json.hreflang,
+                                "undefined": json["notices"][0]["links"][0].value
                             },
-                            "description" : {
-                                "undefined" : json["notices"][0]["links"][0].href
+                            "description": {
+                                "undefined": json["notices"][0]["links"][0].href
                             },
                             "baseIris": [
-                                "https://rdap.afrinic.net/rdap/ip/",
+                                "https://rdap.afrinic.net/rdap/autnum/",
                             ],
                             "prefixList": {
                                 "owl": "http://www.w3.org/2002/07/owl#",
@@ -211,8 +211,100 @@ app.post('/', function (req, res) {
                         }
                     };
 
-                });
-            break;
+                    vizJson.class = [
+                        {
+                            "id": "0",
+                            "type": "owl:Class"
+                        }
+                    ];
+                    vizJson.classAttribute = [
+                        {
+                            "id": "0",
+                            "label": json.name,
+                            "comment": {
+                                "undefined": json["objectClassName"]
+                            },
+                            "annotations": {
+                                "handle": [{
+                                    "identifier": "Handle",
+                                    "language": json.lang,
+                                    "value": json.handle,
+                                    "type": "label"
+                                }],
+                                "startAutnum": [{
+                                    "identifier": "Start Autnum",
+                                    "language": json.lang,
+                                    "value": json.startAutnum,
+                                    "type": "label"
+                                }],
+                                "endAutnum": [{
+                                    "identifier": "End Autnum",
+                                    "language": json.lang,
+                                    "value": json.endAutnum,
+                                    "type": "label"
+                                }],
+
+                                "status": [{
+                                    "identifier": "Status",
+                                    "language": json.lang,
+                                    "value": json.status,
+                                    "type": "label"
+                                }]
+                            }
+                        }
+                    ];
+
+                    vizJson.property = [];
+                    vizJson.propertyAttribute = [];
+
+                    for (let i = 0; i < json.entities.length; i++) {
+                        vizJson.class.push({
+                            "id": (i + 1).toString(),
+                            "type": "owl:Class"
+                        });
+                        vizJson.classAttribute.push({
+                            "id": (i + 1).toString(),
+                            "label": json["entities"][i]["handle"],
+                            "annotations": {
+                                "language": [{
+                                    "identifier": "Language",
+                                    "language": json["entities"][i]["lang"],
+                                    "value": json["entities"][i].lang,
+                                    "type": "label"
+                                }],
+                                "status": [{
+                                    "identifier": "Status",
+                                    "language": json["entities"][i].lang,
+                                    "value": json["entities"][i].status,
+                                    "type": "label"
+                                }],
+                                "roles": [{
+                                    "identifier": "Roles",
+                                    "language": json["entities"][i].lang,
+                                    "value": json["entities"][i]["roles"],
+                                    "type": "label"
+                                }]
+                            },
+                        });
+
+                        vizJson.property.push({
+                            "id": ((i + 1) * 10).toString(),
+                            "type": "owl:ObjectProperty"
+                        });
+
+                        vizJson.propertyAttribute.push({
+                            "id": ((i + 1) * 10).toString(),
+                            "label": "entity",
+                            "domain": (i + 1).toString(),
+                            "range": (0).toString()
+                        });
+
+                    }
+                    saveFile(vizJson);
+                }).catch(function (err) {
+                    console.log(err);
+            });
+                    break;
 
 
         case "rdns":
