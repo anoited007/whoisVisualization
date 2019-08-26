@@ -1,0 +1,257 @@
+{
+    "_comment": "This is the AFRINIC RDAP server.",
+    "header": {
+        "title": {
+            "language": "en",
+            "undefined": "https://rdap.afrinic.net/rdap/domain/10.165.in-addr.arpa"
+        },
+        "description": {
+            "undefined": "https://www.afrinic.net/support/whois-db/reference-manual"
+        },
+        "baseIris": [
+            "https://rdap.afrinic.net/rdap/domain/"
+        ],
+        "prefixList": {
+            "owl": "http://www.w3.org/2002/07/owl#",
+            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "": "http://visualdataweb.de/ontobench/ontology/13/",
+            "xml": "http://www.w3.org/XML/1998/namespace",
+            "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+        },
+        "iri": "https://rdap.afrinic.net/rdap/domain/"
+    },
+    "class": [
+        {
+            "id": "0",
+            "type": "owl:Class"
+        },
+        {
+            "id": "1",
+            "type": "owl:Class"
+        },
+        {
+            "id": "1",
+            "type": "owl:Class"
+        },
+        {
+            "id": "2",
+            "type": "owl:Class"
+        },
+        {
+            "id": "3",
+            "type": "owl:Class"
+        },
+        {
+            "id": "4",
+            "type": "owl:Class"
+        }
+    ],
+    "classAttribute": [
+        {
+            "id": "0",
+            "label": "10.165.in-addr.arpa",
+            "comment": {
+                "undefined": "domain"
+            },
+            "annotations": {
+                "handle": [
+                    {
+                        "identifier": "Handle",
+                        "language": "en",
+                        "value": "10.165.in-addr.arpa",
+                        "type": "label"
+                    }
+                ],
+                "status": [
+                    {
+                        "identifier": "Status",
+                        "language": "en",
+                        "value": [
+                            "active"
+                        ],
+                        "type": "label"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "1",
+            "label": "AW233-AFRINIC",
+            "annotations": {
+                "language": [
+                    {
+                        "identifier": "Language",
+                        "language": "en",
+                        "value": "en",
+                        "type": "label"
+                    }
+                ],
+                "status": [
+                    {
+                        "identifier": "Status",
+                        "language": "en",
+                        "value": [
+                            "active"
+                        ],
+                        "type": "label"
+                    }
+                ],
+                "roles": [
+                    {
+                        "identifier": "Roles",
+                        "language": "en",
+                        "value": [
+                            "administrative",
+                            "technical",
+                            "zone"
+                        ],
+                        "type": "label"
+                    }
+                ],
+                "Object Type": [
+                    {
+                        "identifier": "Object Type",
+                        "language": "en",
+                        "value": "entity",
+                        "type": "label"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "1",
+            "label": "GATEKEEPERX.SAPO.CO.ZA",
+            "annotations": {
+                "ldhName": [
+                    {
+                        "identifier": "ldhName",
+                        "value": "GATEKEEPERX.SAPO.CO.ZA",
+                        "type": "label"
+                    }
+                ],
+                "objectClassName": [
+                    {
+                        "identifier": "Object Class Name",
+                        "value": "nameserver",
+                        "type": "label"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "2",
+            "label": "IGUBU.SAIX.NET",
+            "annotations": {
+                "ldhName": [
+                    {
+                        "identifier": "ldhName",
+                        "value": "IGUBU.SAIX.NET",
+                        "type": "label"
+                    }
+                ],
+                "objectClassName": [
+                    {
+                        "identifier": "Object Class Name",
+                        "value": "nameserver",
+                        "type": "label"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "3",
+            "label": "SANGOMA.SAIX.NET",
+            "annotations": {
+                "ldhName": [
+                    {
+                        "identifier": "ldhName",
+                        "value": "SANGOMA.SAIX.NET",
+                        "type": "label"
+                    }
+                ],
+                "objectClassName": [
+                    {
+                        "identifier": "Object Class Name",
+                        "value": "nameserver",
+                        "type": "label"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "4",
+            "label": "DNS1.WEBCREATIONS.CO.ZA",
+            "annotations": {
+                "ldhName": [
+                    {
+                        "identifier": "ldhName",
+                        "value": "DNS1.WEBCREATIONS.CO.ZA",
+                        "type": "label"
+                    }
+                ],
+                "objectClassName": [
+                    {
+                        "identifier": "Object Class Name",
+                        "value": "nameserver",
+                        "type": "label"
+                    }
+                ]
+            }
+        }
+    ],
+    "property": [
+        {
+            "id": "10",
+            "type": "owl:ObjectProperty"
+        },
+        {
+            "id": "1",
+            "type": "owl:ObjectProperty"
+        },
+        {
+            "id": "2",
+            "type": "owl:ObjectProperty"
+        },
+        {
+            "id": "3",
+            "type": "owl:ObjectProperty"
+        },
+        {
+            "id": "4",
+            "type": "owl:ObjectProperty"
+        }
+    ],
+    "propertyAttribute": [
+        {
+            "id": "10",
+            "label": "entity",
+            "domain": "1",
+            "range": "0"
+        },
+        {
+            "id": "10",
+            "label": "Name Server",
+            "domain": "1",
+            "range": "0"
+        },
+        {
+            "id": "20",
+            "label": "Name Server",
+            "domain": "2",
+            "range": "0"
+        },
+        {
+            "id": "30",
+            "label": "Name Server",
+            "domain": "3",
+            "range": "0"
+        },
+        {
+            "id": "40",
+            "label": "Name Server",
+            "domain": "4",
+            "range": "0"
+        }
+    ]
+}

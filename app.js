@@ -207,7 +207,7 @@ app.post('/', function (req, res) {
                                 "xml": "http://www.w3.org/XML/1998/namespace",
                                 "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
                             },
-                            "iri": "https://rdap.afrinic.net/rdap/ip/"
+                            "iri": "https://rdap.afrinic.net/rdap/autnum/"
                         }
                     };
 
@@ -308,6 +308,176 @@ app.post('/', function (req, res) {
 
 
         case "rdns":
+            axios.get(baseUrl + 'domain/' + query)
+                .then(response => {
+                    let json = response.data;
+
+                    let vizJson = {
+                        "_comment": "This is the AFRINIC RDAP server.",
+                        "header": {
+                            "title" : {
+                                "language": json.lang,
+                                "undefined" : json["notices"][0]["links"][0].value
+                            },
+
+                            "description" : {
+                                "undefined" : json["notices"][0]["links"][0].href
+                            },
+
+                            "baseIris": [
+                                "https://rdap.afrinic.net/rdap/domain/",
+                            ],
+
+                            "prefixList": {
+                                "owl": "http://www.w3.org/2002/07/owl#",
+                                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                                "": "http://visualdataweb.de/ontobench/ontology/13/",
+                                "xml": "http://www.w3.org/XML/1998/namespace",
+                                "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+                            },
+
+                            "iri": "https://rdap.afrinic.net/rdap/domain/"
+                        }
+                    };
+
+                    vizJson.class = [
+                        {
+                            "id": "0",
+                            "type": "owl:Class"
+                        }
+                    ];
+                    vizJson.classAttribute = [
+                        {
+                            "id": "0",
+                            "label": json.handle,
+                            "comment": {
+                                "undefined": json["objectClassName"]
+                            },
+
+                            "annotations": {
+                                "handle": [{
+                                    "identifier": "Handle",
+                                    "language": json.lang,
+                                    "value": json.handle,
+                                    "type": "label"
+                                }],
+
+                                "status": [{
+                                    "identifier": "Status",
+                                    "language": json.lang,
+                                    "value": json.status,
+                                    "type": "label"
+                                }]
+                            }
+                        }
+                    ];
+                    vizJson.property = [];
+                    vizJson.propertyAttribute = [];
+
+                    for (let i = 0; i < json.entities.length; i++) {
+                        vizJson.class.push({
+                            "id": (i + 1).toString(),
+                            "type": "owl:Class"
+                        });
+
+                        vizJson.classAttribute.push({
+                            "id": (i + 1).toString(),
+                            "label": json["entities"][i]["handle"],
+                            "annotations": {
+
+                                "language": [{
+                                    "identifier": "Language",
+                                    "language": json["entities"][i]["lang"],
+                                    "value": json["entities"][i].lang,
+                                    "type": "label"
+                                }],
+
+                                "status": [{
+                                    "identifier": "Status",
+                                    "language": json["entities"][i].lang,
+                                    "value": json["entities"][i].status,
+                                    "type": "label"
+                                }],
+
+                                "roles": [{
+                                    "identifier": "Roles",
+                                    "language": json["entities"][i].lang,
+                                    "value": json["entities"][i]["roles"],
+                                    "type": "label"
+                                }],
+
+                                "Object Type": [{
+                                    "identifier": "Object Type",
+                                    "language": json["entities"][i].lang,
+                                    "value": json["entities"][i]["objectClassName"],
+                                    "type": "label"
+                                }]
+                            },
+                        });
+                        vizJson.property.push({
+                            "id": ((i + 1) * 10).toString(),
+                            "type": "owl:ObjectProperty"
+                        });
+                        vizJson.propertyAttribute.push({
+                            "id": ((i + 1) * 10).toString(),
+                            "label": "entity",
+                            "domain": (i + 1).toString(),
+                            "range": (0).toString()
+                        });
+                    }
+
+                    for(let i=0; i < json["nameservers"].length; i++){
+                        let skip = json.entities.length;
+                        let _class = {
+                            "id": (skip + i).toString(),
+                            "type": "owl:Class"
+                        };
+                        vizJson.class.push(_class);
+
+                        let _classAttribute = {
+                            "id": (skip + i).toString(),
+                            "label": json["nameservers"][i]["handle"],
+                            "annotations": {
+                                "ldhName": [{
+                                    "identifier": "ldhName",
+                                    "value": json["nameservers"][i].ldhName,
+                                    "type": "label"
+                                }],
+
+                                "objectClassName": [{
+                                    "identifier": "Object Class Name",
+                                    "value": json["nameservers"][i].objectClassName,
+                                    "type": "label"
+                                }]
+                            }
+                        };
+
+                        vizJson.classAttribute.push(_classAttribute);
+
+                        let _property = {
+                            "id": (skip + i).toString(),
+                            "type": "owl:ObjectProperty"
+                        };
+                        vizJson.property.push(_property);
+
+                        let _propertyAttribute = {
+                            "id": (( skip + i) * 10).toString(),
+                            "label": "Name Server",
+                            "domain": (skip+ i).toString(),
+                            "range": (0).toString()
+                        };
+
+                        vizJson.propertyAttribute.push(_propertyAttribute);
+
+
+                    }
+
+                    saveFile(vizJson);
+
+                } ).catch(function (err) {
+                console.log(err);
+            });
             break;
 
 
