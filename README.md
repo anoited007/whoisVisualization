@@ -1,13 +1,13 @@
-# WEBVowl JSON Writer
+# Whois Visualization
 
-A node server to convert RDAP IP query response into a OWL-JSON ontology/format. It creates a json file in the `data` folder that can be viewed with [on the Webvowl editor](http://www.visualdataweb.de/webvowl/).
+A node server to convert RDAP query response into an OWL-JSON ontology/format. It creates a json file in the data folder that can be viewed with WebVowl.
 
 ## Setup
 
 - clone the repo
-- cd webvowl-json-writer
-- `npm install`
+- cd whoisVisualization
+- `npm install` 
 
 ### Serve
 
-- `node app.js`
+- `node app.js` or  use `nodemon app.js` to restart the server automatically when there is a change in code.
