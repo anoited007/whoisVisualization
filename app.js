@@ -21,10 +21,7 @@ app.engine('html', require('ejs').renderFile);
 app.use(express.urlencoded());
 app.use(express.json());
 
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-const $ = (require('jquery'))(dom.window);
+let json; // Variable to hold the json data from RDAP
 
 app.get('/', function (req, res) {
     res.render('index.html');
@@ -35,457 +32,377 @@ app.post('/', function (req, res) {
     let entityType = req.body['object-type'];
     let baseUrl = 'https://rdap.afrinic.net/rdap/';
 
-
-    switch (entityType) {
-        case "ip":
-            axios.get(baseUrl + 'ip/' + query)
-                .then(response => {
-                    let json = response.data;
-                    console.log(json);
-                    let vizJson = {
-                        "_comment": "This is the AFRINIC RDAP server.",
-                        "header": {
-                            "title" : {
-                                "language": json.lang,
-                                "undefined" : json["notices"][0]["links"][0].value
-                            },
-                            "description" : {
-                                "undefined" : json["notices"][0]["links"][0].href
-                            },
-                            "baseIris": [
-                                "https://rdap.afrinic.net/rdap/ip/",
-                            ],
-                            "prefixList": {
-                                "owl": "http://www.w3.org/2002/07/owl#",
-                                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                                "xsd": "http://www.w3.org/2001/XMLSchema#",
-                                "": "http://visualdataweb.de/ontobench/ontology/13/",
-                                "xml": "http://www.w3.org/XML/1998/namespace",
-                                "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
-                            },
-                            "iri": "https://rdap.afrinic.net/rdap/ip/"
-                        }
-                    };
-                    vizJson.class = [
-                        {
-                            "id": "0",
-                            "type": "owl:Class"
-                        }
-                    ];
-                    vizJson.classAttribute = [
-                        {
-                            "id": "0",
-                            "label": json.name,
-                            "comment": {
-                                "undefined": json["objectClassName"]
-                            },
-                            "annotations": {
-                                "type": [{
-                                    "identifier": "IP Type",
-                                    "language" : json.lang,
-                                    "value" : json.type,
-                                    "type" : "label"
-                                }],
-                                "handle": [{
-                                    "identifier": "Handle",
-                                    "language": json.lang,
-                                    "value": json.handle,
-                                    "type": "label"
-                                }],
-                                "startAddress": [{
-                                    "identifier": "Start Address",
-                                    "language": json.lang,
-                                    "value": json.startAddress,
-                                    "type": "label"
-                                }],
-                                "endAddress": [{
-                                    "identifier": "End Address",
-                                    "language": json.lang,
-                                    "value": json.endAddress,
-                                    "type": "label"
-                                }],
-                                "parentHandle": [{
-                                    "identifier": "Parent Handle",
-                                    "language": json.lang,
-                                    "value": json.parentHandle,
-                                    "type": "label"
-                                }],
-                                "ipVersion": [{
-                                    "identifier": "IP Version",
-                                    "language": json.lang,
-                                    "value": json.ipVersion,
-                                    "type": "label"
-                                }],
-                                "country": [{
-                                    "identifier": "Country",
-                                    "language": json.lang,
-                                    "value": json.country,
-                                    "type": "label"
-                                }],
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json.lang,
-                                    "value": json.status,
-                                    "type": "label"
-                                }]
-                            }
-                        }
-                    ];
-                    vizJson.property = [];
-                    vizJson.propertyAttribute = [];
-
-                    for (let i = 0; i < json.entities.length; i++) {
-                        vizJson.class.push({
-                            "id": (i + 1).toString(),
-                            "type": "owl:Class"
-                        });
-                        vizJson.classAttribute.push({
-                            "id": (i + 1).toString(),
-                            "label": json["entities"][i]["handle"],
-                            "annotations": {
-                                "language": [{
-                                    "identifier": "Language",
-                                    "language": json["entities"][i]["lang"],
-                                    "value": json["entities"][i].lang,
-                                    "type": "label"
-                                }],
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i].status,
-                                    "type": "label"
-                                }],
-                                "roles": [{
-                                    "identifier": "Roles",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i]["roles"],
-                                    "type": "label"
-                                }]
-                            },
-                        });
-                        vizJson.property.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "type": "owl:ObjectProperty"
-                        });
-                        vizJson.propertyAttribute.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "label": "entity",
-                            "domain": (i + 1).toString(),
-                            "range": (0).toString()
-                        });
-                    }
-
-                    saveFile(vizJson);
-
-                } ).catch(function (err) {
-                console.log(err);
-            });
-            break;
-
-        case "as-number":
-            axios.get(baseUrl + 'autnum/' + query)
-                .then(response => {
-                    let json = response.data;
-                    let vizJson = {
-                        "_comment": "This is the AFRINIC RDAP server.",
-                        "header": {
-                            "title": {
-                                "language": json.hreflang,
-                                "undefined": json["notices"][0]["links"][0].value
-                            },
-                            "description": {
-                                "undefined": json["notices"][0]["links"][0].href
-                            },
-                            "baseIris": [
-                                "https://rdap.afrinic.net/rdap/autnum/",
-                            ],
-                            "prefixList": {
-                                "owl": "http://www.w3.org/2002/07/owl#",
-                                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                                "xsd": "http://www.w3.org/2001/XMLSchema#",
-                                "": "http://visualdataweb.de/ontobench/ontology/13/",
-                                "xml": "http://www.w3.org/XML/1998/namespace",
-                                "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
-                            },
-                            "iri": "https://rdap.afrinic.net/rdap/autnum/"
-                        }
-                    };
-
-                    vizJson.class = [
-                        {
-                            "id": "0",
-                            "type": "owl:Class"
-                        }
-                    ];
-                    vizJson.classAttribute = [
-                        {
-                            "id": "0",
-                            "label": json.name,
-                            "comment": {
-                                "undefined": json["objectClassName"]
-                            },
-                            "annotations": {
-                                "handle": [{
-                                    "identifier": "Handle",
-                                    "language": json.lang,
-                                    "value": json.handle,
-                                    "type": "label"
-                                }],
-                                "startAutnum": [{
-                                    "identifier": "Start Autnum",
-                                    "language": json.lang,
-                                    "value": json.startAutnum,
-                                    "type": "label"
-                                }],
-                                "endAutnum": [{
-                                    "identifier": "End Autnum",
-                                    "language": json.lang,
-                                    "value": json.endAutnum,
-                                    "type": "label"
-                                }],
-
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json.lang,
-                                    "value": json.status,
-                                    "type": "label"
-                                }]
-                            }
-                        }
-                    ];
-
-                    vizJson.property = [];
-                    vizJson.propertyAttribute = [];
-
-                    for (let i = 0; i < json.entities.length; i++) {
-                        vizJson.class.push({
-                            "id": (i + 1).toString(),
-                            "type": "owl:Class"
-                        });
-                        vizJson.classAttribute.push({
-                            "id": (i + 1).toString(),
-                            "label": json["entities"][i]["handle"],
-                            "annotations": {
-                                "language": [{
-                                    "identifier": "Language",
-                                    "language": json["entities"][i]["lang"],
-                                    "value": json["entities"][i].lang,
-                                    "type": "label"
-                                }],
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i].status,
-                                    "type": "label"
-                                }],
-                                "roles": [{
-                                    "identifier": "Roles",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i]["roles"],
-                                    "type": "label"
-                                }]
-                            },
-                        });
-
-                        vizJson.property.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "type": "owl:ObjectProperty"
-                        });
-
-                        vizJson.propertyAttribute.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "label": "entity",
-                            "domain": (i + 1).toString(),
-                            "range": (0).toString()
-                        });
-
-                    }
-                    saveFile(vizJson);
-                }).catch(function (err) {
-                    console.log(err);
-            });
-                    break;
-
-
-        case "rdns":
-            axios.get(baseUrl + 'domain/' + query)
-                .then(response => {
-                    let json = response.data;
-
-                    let vizJson = {
-                        "_comment": "This is the AFRINIC RDAP server.",
-                        "header": {
-                            "title" : {
-                                "language": json.lang,
-                                "undefined" : json["notices"][0]["links"][0].value
-                            },
-
-                            "description" : {
-                                "undefined" : json["notices"][0]["links"][0].href
-                            },
-
-                            "baseIris": [
-                                "https://rdap.afrinic.net/rdap/domain/",
-                            ],
-
-                            "prefixList": {
-                                "owl": "http://www.w3.org/2002/07/owl#",
-                                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                                "xsd": "http://www.w3.org/2001/XMLSchema#",
-                                "": "http://visualdataweb.de/ontobench/ontology/13/",
-                                "xml": "http://www.w3.org/XML/1998/namespace",
-                                "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
-                            },
-
-                            "iri": "https://rdap.afrinic.net/rdap/domain/"
-                        }
-                    };
-
-                    vizJson.class = [
-                        {
-                            "id": "0",
-                            "type": "owl:Class"
-                        }
-                    ];
-                    vizJson.classAttribute = [
-                        {
-                            "id": "0",
-                            "label": json.handle,
-                            "comment": {
-                                "undefined": json["objectClassName"]
-                            },
-
-                            "annotations": {
-                                "handle": [{
-                                    "identifier": "Handle",
-                                    "language": json.lang,
-                                    "value": json.handle,
-                                    "type": "label"
-                                }],
-
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json.lang,
-                                    "value": json.status,
-                                    "type": "label"
-                                }]
-                            }
-                        }
-                    ];
-                    vizJson.property = [];
-                    vizJson.propertyAttribute = [];
-
-                    for (let i = 0; i < json.entities.length; i++) {
-                        vizJson.class.push({
-                            "id": (i + 1).toString(),
-                            "type": "owl:Class"
-                        });
-
-                        vizJson.classAttribute.push({
-                            "id": (i + 1).toString(),
-                            "label": json["entities"][i]["handle"],
-                            "annotations": {
-
-                                "language": [{
-                                    "identifier": "Language",
-                                    "language": json["entities"][i]["lang"],
-                                    "value": json["entities"][i].lang,
-                                    "type": "label"
-                                }],
-
-                                "status": [{
-                                    "identifier": "Status",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i].status,
-                                    "type": "label"
-                                }],
-
-                                "roles": [{
-                                    "identifier": "Roles",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i]["roles"],
-                                    "type": "label"
-                                }],
-
-                                "Object Type": [{
-                                    "identifier": "Object Type",
-                                    "language": json["entities"][i].lang,
-                                    "value": json["entities"][i]["objectClassName"],
-                                    "type": "label"
-                                }]
-                            },
-                        });
-                        vizJson.property.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "type": "owl:ObjectProperty"
-                        });
-                        vizJson.propertyAttribute.push({
-                            "id": ((i + 1) * 10).toString(),
-                            "label": "entity",
-                            "domain": (i + 1).toString(),
-                            "range": (0).toString()
-                        });
-                    }
-
-                    for(let i=0; i < json["nameservers"].length; i++){
-                        let skip = json.entities.length;
-                        let _class = {
-                            "id": (skip + i).toString(),
-                            "type": "owl:Class"
-                        };
-                        vizJson.class.push(_class);
-
-                        let _classAttribute = {
-                            "id": (skip + i).toString(),
-                            "label": json["nameservers"][i]["handle"],
-                            "annotations": {
-                                "ldhName": [{
-                                    "identifier": "ldhName",
-                                    "value": json["nameservers"][i].ldhName,
-                                    "type": "label"
-                                }],
-
-                                "objectClassName": [{
-                                    "identifier": "Object Class Name",
-                                    "value": json["nameservers"][i].objectClassName,
-                                    "type": "label"
-                                }]
-                            }
-                        };
-
-                        vizJson.classAttribute.push(_classAttribute);
-
-                        let _property = {
-                            "id": (skip + i).toString(),
-                            "type": "owl:ObjectProperty"
-                        };
-                        vizJson.property.push(_property);
-
-                        let _propertyAttribute = {
-                            "id": (( skip + i) * 10).toString(),
-                            "label": "Name Server",
-                            "domain": (skip+ i).toString(),
-                            "range": (0).toString()
-                        };
-
-                        vizJson.propertyAttribute.push(_propertyAttribute);
-
-
-                    }
-
-                    saveFile(vizJson);
-
-                } ).catch(function (err) {
-                console.log(err);
-            });
-            break;
-
-
-        case "entity":
-            break;
+    function getCommonData(json) {
+       return {
+        "_comment": "This is the AFRINIC RDAP server.",
+        "header": {
+            "title" : {
+                "language": json.lang,
+                "undefined" : json["notices"][0]["links"][0].value
+            },
+            "description" : {
+                "undefined" : json["notices"][0]["links"][0].href
+            },
+            "baseIris": [
+                "https://rdap.afrinic.net/rdap/",
+            ],
+            "prefixList": {
+                "owl": "http://www.w3.org/2002/07/owl#",
+                "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+                "xsd": "http://www.w3.org/2001/XMLSchema#",
+                "": "http://visualdataweb.de/ontobench/ontology/13/",
+                "xml": "http://www.w3.org/XML/1998/namespace",
+                "rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+            },
+            "iri": "https://rdap.afrinic.net/rdap/"
+        }
+      };
 
     }
-    res.send("Good");
+
+    function getCommonClassAttributes(json, vizJson) {
+        for (let i = 0; i < json.entities.length; i++) {
+
+            let _class =  {
+                "id": (i + 1).toString(),
+                "type": "owl:Class"
+            };
+
+            vizJson.class.push(_class);
+
+             let _classAttribute =   {
+                "id": (i + 1).toString(),
+                "label": json["entities"][i]["handle"],
+                "annotations": {
+                    "language": [{
+                        "identifier": "Language",
+                        "language": json["entities"][i]["lang"],
+                        "value": json["entities"][i].lang,
+                        "type": "label"
+                    }],
+                    "status": [{
+                        "identifier": "Status",
+                        "language": json["entities"][i].lang,
+                        "value": json["entities"][i].status,
+                        "type": "label"
+                    }],
+                    "roles": [{
+                        "identifier": "Roles",
+                        "language": json["entities"][i].lang,
+                        "value": json["entities"][i]["roles"],
+                        "type": "label"
+                    }]
+                },
+            };
+
+             vizJson.classAttribute.push(_classAttribute);
+
+            vizJson.property.push({
+                "id": ((i + 1) * 10).toString(),
+                "type": "owl:ObjectProperty"
+            });
+            vizJson.propertyAttribute.push({
+                "id": ((i + 1) * 10).toString(),
+                "label": "entity",
+                "domain": (i + 1).toString(),
+                "range": (0).toString()
+            });
+
+            return vizJson;
+
+        }
+    }
+
+        switch (entityType) {
+            case "ip":
+                axios.get(baseUrl + 'ip/' + query)
+                    .then(response => {
+                        let json = response.data;
+                        // console.log(json);
+                        let vizJson = getCommonData(json);
+                        vizJson.class = [
+                            {
+                                "id": "0",
+                                "type": "rdfs:Class"
+                            }
+                        ];
+                        vizJson.classAttribute = [
+                            {
+                                "id": "0",
+                                "label": json.name,
+                                "comment": {
+                                    "undefined": json["objectClassName"]
+                                },
+                                "annotations": {
+                                    "type": [{
+                                        "identifier": "IP Type",
+                                        "language": json.lang,
+                                        "value": json.type,
+                                        "type": "label"
+                                    }],
+                                    "handle": [{
+                                        "identifier": "Handle",
+                                        "language": json.lang,
+                                        "value": json.handle,
+                                        "type": "label"
+                                    }],
+                                    "startAddress": [{
+                                        "identifier": "Start Address",
+                                        "language": json.lang,
+                                        "value": json.startAddress,
+                                        "type": "label"
+                                    }],
+                                    "endAddress": [{
+                                        "identifier": "End Address",
+                                        "language": json.lang,
+                                        "value": json.endAddress,
+                                        "type": "label"
+                                    }],
+                                    "parentHandle": [{
+                                        "identifier": "Parent Handle",
+                                        "language": json.lang,
+                                        "value": json.parentHandle,
+                                        "type": "label"
+                                    }],
+                                    "ipVersion": [{
+                                        "identifier": "IP Version",
+                                        "language": json.lang,
+                                        "value": json.ipVersion,
+                                        "type": "label"
+                                    }],
+                                    "country": [{
+                                        "identifier": "Country",
+                                        "language": json.lang,
+                                        "value": json.country,
+                                        "type": "label"
+                                    }],
+                                    "status": [{
+                                        "identifier": "Status",
+                                        "language": json.lang,
+                                        "value": json.status,
+                                        "type": "label"
+                                    }]
+                                }
+                            }
+                        ];
+                        vizJson.property = [];
+                        vizJson.propertyAttribute = [];
+
+                        getCommonClassAttributes(json, vizJson);
+
+                        saveFile(vizJson);
+
+                    }).catch(function (err) {
+                    console.log(err);
+                });
+                break;
+
+            case "as-number":
+                axios.get(baseUrl + 'autnum/' + query)
+                    .then(response => {
+                        let json = response.data;
+                        let vizJson = getCommonData(json);
+
+                        vizJson.class = [
+                            {
+                                "id": "0",
+                                "type": "rdfs:Class"
+                            }
+                        ];
+                        vizJson.classAttribute = [
+                            {
+                                "id": "0",
+                                "label": json.name,
+                                "comment": {
+                                    "undefined": json["objectClassName"]
+                                },
+                                "annotations": {
+                                    "handle": [{
+                                        "identifier": "Handle",
+                                        "language": json.lang,
+                                        "value": json.handle,
+                                        "type": "label"
+                                    }],
+                                    "startAutnum": [{
+                                        "identifier": "Start Autnum",
+                                        "language": json.lang,
+                                        "value": json.startAutnum,
+                                        "type": "label"
+                                    }],
+                                    "endAutnum": [{
+                                        "identifier": "End Autnum",
+                                        "language": json.lang,
+                                        "value": json.endAutnum,
+                                        "type": "label"
+                                    }],
+
+                                    "status": [{
+                                        "identifier": "Status",
+                                        "language": json.lang,
+                                        "value": json.status,
+                                        "type": "label"
+                                    }]
+                                }
+                            }
+                        ];
+
+                        vizJson.property = [];
+                        vizJson.propertyAttribute = [];
+
+                        getCommonClassAttributes(json, vizJson);
+
+                        saveFile(vizJson);
+                    }).catch(function (err) {
+                    console.log(err);
+                });
+                break;
+
+
+            case "rdns":
+                axios.get(baseUrl + 'domain/' + query)
+                    .then(response => {
+                        json = response.data;
+
+                        let vizJson = getCommonData(json);
+                        vizJson.class = [
+                            {
+                                "id": "0",
+                                "type": "rdfs:Class"
+                            }
+                        ];
+                        vizJson.classAttribute = [
+                            {
+                                "id": "0",
+                                "label": json.handle,
+                                "comment": {
+                                    "undefined": json["objectClassName"]
+                                },
+
+                                "annotations": {
+                                    "handle": [{
+                                        "identifier": "Handle",
+                                        "language": json.lang,
+                                        "value": json.handle,
+                                        "type": "label"
+                                    }],
+
+                                    "status": [{
+                                        "identifier": "Status",
+                                        "language": json.lang,
+                                        "value": json.status,
+                                        "type": "label"
+                                    }]
+                                }
+                            }
+                        ];
+                        vizJson.property = [];
+                        vizJson.propertyAttribute = [];
+
+                        getCommonClassAttributes(json, vizJson);
+
+                        for (let i = 0; i < json["nameservers"].length; i++) {
+                            let skip = json.entities.length;
+                            let _class = {
+                                "id": (skip + i).toString(),
+                                "type": "owl:Class"
+                            };
+                            vizJson.class.push(_class);
+
+                            let _classAttribute = {
+                                "id": (skip + i).toString(),
+                                "label": json["nameservers"][i]["handle"],
+                                "annotations": {
+                                    "ldhName": [{
+                                        "identifier": "ldhName",
+                                        "value": json["nameservers"][i].ldhName,
+                                        "type": "label"
+                                    }],
+
+                                    "objectClassName": [{
+                                        "identifier": "Object Class Name",
+                                        "value": json["nameservers"][i].objectClassName,
+                                        "type": "label"
+                                    }]
+                                }
+                            };
+
+                            vizJson.classAttribute.push(_classAttribute);
+
+                            let _property = {
+                                "id": (skip + i).toString(),
+                                "type": "owl:ObjectProperty"
+                            };
+                            vizJson.property.push(_property);
+
+                            let _propertyAttribute = {
+                                "id": ((skip + i) * 10).toString(),
+                                "label": "Name Server",
+                                "domain": (skip + i).toString(),
+                                "range": (0).toString()
+                            };
+
+                            vizJson.propertyAttribute.push(_propertyAttribute);
+                        }
+                        saveFile(vizJson);
+
+                    }).catch(function (err) {
+                    console.log(err);
+                });
+                break;
+
+            case "entity":
+                axios.get(baseUrl + 'entity/' + query)
+                    .then(response => {
+                        json = response.data;
+                        let vizJson = getCommonData(json);
+                        vizJson.class = [
+                            {
+                                "id": "0",
+                                "type": "rdfs:Class"
+                            }
+                        ];
+
+                        vizJson.classAttribute = [
+                            {
+                                "id": "0",
+                                "label": json.handle,
+                                "comment": {
+                                    "undefined": json["objectClassName"]
+                                },
+
+                                "annotations": {
+                                    "handle": [{
+                                        "identifier": "Handle",
+                                        "language": json.lang,
+                                        "value": json.handle,
+                                        "type": "label"
+                                    }],
+
+                                    "status": [{
+                                        "identifier": "Status",
+                                        "language": json.lang,
+                                        "value": json.status,
+                                        "type": "label"
+                                    }]
+                                }
+                            }
+                        ];
+
+                        vizJson.property = [];
+                        vizJson.propertyAttribute = [];
+
+                        getCommonClassAttributes(json, vizJson);
+
+                        saveFile(vizJson);
+
+                    })
+                    .catch(function (err) {
+                        console.log(err);
+                    });
+                break;
+
+        }
+        res.send("Good");
 
 });
 
