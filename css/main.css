@@ -1,0 +1,16 @@
+.container{
+    width: 40vw !important;
+    margin: 50vh auto !important;
+}
+
+button{
+    background-color: #d15e14;
+}
+
+.btn-primary {
+    background-color: #d15e14;
+}
+
+.btn-primary:hover {
+    background-color: #1B252E;
+}

@@ -25,14 +25,18 @@ let json; // Variable to hold the json data from RDAP
 
 app.get('/', function (req, res) {
     res.render('index.html');
+    // res.redirect('/whois');
 });
 
-app.post('/', function (req, res) {
-    let query = req.body['query'];
+app.post('/whois', function (req, res) {
+    let query = req.body['query'].trim();
     let entityType = req.body['object-type'];
     let baseUrl = 'https://rdap.afrinic.net/rdap/';
 
     function getCommonData(json) {
+        /*
+        Get the common data across all endpoints to reduce code duplicates.
+         */
        return {
         "_comment": "This is the AFRINIC RDAP server.",
         "header": {
@@ -61,6 +65,9 @@ app.post('/', function (req, res) {
     }
 
     function getCommonClassAttributes(json, vizJson) {
+        /*
+        Get the common class attributes to reduce code duplicate.
+         */
         for (let i = 0; i < json.entities.length; i++) {
 
             let _class =  {
@@ -108,11 +115,12 @@ app.post('/', function (req, res) {
                 "range": (0).toString()
             });
 
-            return vizJson;
-
         }
+        return vizJson;
     }
-
+/*
+    Using a switch case to make the call to the correct endpoint .
+ */
         switch (entityType) {
             case "ip":
                 axios.get(baseUrl + 'ip/' + query)
@@ -190,7 +198,7 @@ app.post('/', function (req, res) {
 
                         getCommonClassAttributes(json, vizJson);
 
-                        saveFile(vizJson);
+                       return saveFile(req, res, vizJson);
 
                     }).catch(function (err) {
                     console.log(err);
@@ -251,7 +259,8 @@ app.post('/', function (req, res) {
 
                         getCommonClassAttributes(json, vizJson);
 
-                        saveFile(vizJson);
+                       return  saveFile(req, res, vizJson);
+
                     }).catch(function (err) {
                     console.log(err);
                 });
@@ -343,7 +352,8 @@ app.post('/', function (req, res) {
 
                             vizJson.propertyAttribute.push(_propertyAttribute);
                         }
-                        saveFile(vizJson);
+
+                        return saveFile(req, res, vizJson);
 
                     }).catch(function (err) {
                     console.log(err);
@@ -393,7 +403,7 @@ app.post('/', function (req, res) {
 
                         getCommonClassAttributes(json, vizJson);
 
-                        saveFile(vizJson);
+                        return saveFile(req, res, vizJson);
 
                     })
                     .catch(function (err) {
@@ -402,7 +412,7 @@ app.post('/', function (req, res) {
                 break;
 
         }
-        res.send("Good");
+        // res.send("Good");
 
 });
 
@@ -410,9 +420,22 @@ app.get('/whois', function (req, res) {
     res.render('whois-visual.html');
 });
 
-function saveFile(jsonData){
+function showVisualization(req, res, fileName) {
+    /*
+    Redirect the user to the page that has the visualization.
+     */
+    let url = '/whois#file=' + fileName;
+    res.writeHead(301, { "Location": "http://" + req.headers['host'] + url });
+    return res.end();
+}
+
+function saveFile(req, res, jsonData){
+    /*
+    Save the JSON with the current date as file name.
+     */
     const fileName = Date.now() + '.json';
     fs.writeFileSync(`data/${fileName}`, JSON.stringify(jsonData, null, 4));
+    showVisualization(req, res, fileName)
 }
 
 app.listen(PORT, (err) => {

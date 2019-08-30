@@ -6,8 +6,9 @@ A node server to convert RDAP query response into an OWL-JSON ontology/format. I
 
 - clone the repo
 - cd whoisVisualization
-- `npm install` 
+- Ensure you have nodejs and npm installed
+- Run `npm install` to install dependencies.
 
 ### Serve
 
-- `node app.js` or  use `nodemon app.js` to restart the server automatically when there is a change in code.
+- Run `node app.js` or  use `nodemon app.js` to restart the server automatically when there is a change in code.

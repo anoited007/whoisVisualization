@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/main.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <!--  <script src="/js/main.js"></script> -->
 
@@ -15,18 +16,18 @@
 <div class="container">
 
 
- <form method="post" id="rdap">
+ <form method="post" id="rdap" action="/whois">
    <div class="form-group">
      <input type="text" class="form-control" id="query" name="query" placeholder="Enter your query" required>
    </div>
 
    <div class="checkbox">
-     <label><input type="radio" value="ip" name="object-type" id="ip" checked> IP</label>
+     <label><input type="radio"  value="ip" name="object-type" id="ip" checked> IP</label>
      <label><input type="radio" value="as-number" id="as-number" name="object-type"> AS Number</label>
      <label><input type="radio" value="rdns" id="rdns" name="object-type"> RDNS</label>
-     <label><input type="radio" value="entity" id="entity" name="object-type"> Entity</label>
+     <label><input type="radio"  value="entity" id="entity" name="object-type"> Entity</label>
    </div>
-   <button type="submit" class="btn btn-default" id="submit"> Submit </button>
+   <button type="submit" class="btn btn-primary" id="submit"> Submit </button>
  </form>
 
 </div>
